@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-class Profile {
+class ProfileFunctions {
 	public static void main(String[] args) throws IOException {
 		loadProfile();
 	}
