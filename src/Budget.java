@@ -5,7 +5,6 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 
-//TODO CHANGE LOAD BUTTON TO BE AN EXPLORER WHERE YOU SELECT THE FILE
 public class Budget extends JFrame {
 	public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
@@ -88,7 +87,6 @@ public class Budget extends JFrame {
 		selectProfileButton = new JButton("Select Profile");
 		loadProfileButton = new JButton("Load Profile");
 		profileSelect.setEditable(false);
-		
 		//Set button size
 		newProfileButton.setPreferredSize(new Dimension(300, 50));
 		selectProfileButton.setPreferredSize(new Dimension(300, 50));
@@ -187,25 +185,21 @@ public class Budget extends JFrame {
 			remove(welcomeWindow);
 			setLayout(new GridLayout(6,1));
 			incomeWindow();
+			
 			/**
 			profileWelcomeWindow();
-			
 			spendingWindow();
 			billsWindow();
 			paymentsWidnow();
 			groceryWindow();
 			wishlistWindow();
-			remove(welcomeWindow);
-			Budget.this.add(profileWelcomeWindow);
+
 			add(incomeWindow);
 			add(spendingWindow);
 			add(billsWindow);
 			add(paymentsWindow);
 			add(groceryWindow);
 			add(wishlistWindow);
-			revalidate();
-			repaint();
-			setVisible(true);
 			**/
 			
 			add(incomeWindow);
@@ -216,6 +210,20 @@ public class Budget extends JFrame {
 	
 	private class clearActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			remove(incomeWindow);
+			/**
+			profileWelcomeWindow();
+			spendingWindow();
+			billsWindow();
+			paymentsWidnow();
+			groceryWindow();
+			wishlistWindow();
+			**/
+			setLayout(new BorderLayout());
+			setSize(500, 300);
+			welcomeWindow();
+			add(welcomeWindow, BorderLayout.CENTER);
+			setVisible(true);
 			
 		}
 	}
