@@ -1,42 +1,39 @@
 import javax.swing.*;
+import javax.swing.filechooser.*;
 import java.io.*;
 import java.util.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 //TODO CHANGE LOAD BUTTON TO BE AN EXPLORER WHERE YOU SELECT THE FILE
 public class Budget extends JFrame {
-	public File profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Default.profile"); 
+	public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
 	private JPanel welcomeWindow, profileWelcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow; 
 	private JLabel welcomeLabel, profileWelcomeLabel, incomeLabel, monthlyIncomeLabel, weeklyIncomeLabel, spendingLabel, billsLabel, paymentsLabel, groceryLabel, wishlistLabel;
-	private JButton newProfileButton, loadProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
-	private NewWindow newProfile, loadProfile;
-	//private JTextField textField; 
-	final int WINDOW_WIDTH = 500;
-	final int WINDOW_HEIGHT = 700;
+	private JButton newProfileButton, selectProfileButton, loadProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
+	private JTextField profileSelect = new JTextField(27);
+	private NewWindow newProfile;
 	
-	public Budget() throws IOException {
+	public Budget() {
 		setupMenuBar();
 		setJMenuBar(menuBar);
 		setTitle("Dodongos' Budget Calculator");
-		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-		setLayout(new GridLayout(6,1));
+		setLayout(new BorderLayout());
+		setSize(500, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		welcomeWindow();
-		//incomeWindow = new IncomePanel(profile);
-		add(welcomeWindow);
-		//add(incomeWindow);
+		add(welcomeWindow, BorderLayout.CENTER);
 		setVisible(true);
 	}
 	
 	public void setupMenuBar() {
 		//Initialize Load Profile Options
 		ArrayList<String> profilesArray = new ArrayList<String>();
-		File dir = new File("C:\\Users\\Dodongos\\git\\Budget");
+		File dir = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\");
 		File[] profileList = dir.listFiles();		
-		for(int i = 0; i < profileList.length-1; i++) {
+		for(int i = 0; i < profileList.length; i++) {
 			if(profileList[i].isFile()) {
 				String name = profileList[i].getName();
 				if(name.endsWith(".profile")) {
@@ -85,12 +82,32 @@ public class Budget extends JFrame {
 	}
 	
 	public void welcomeWindow() {
-		welcomeLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
 		welcomeWindow = new JPanel();
+		welcomeLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
+		newProfileButton = new JButton("New Profile");
+		selectProfileButton = new JButton("Select Profile");
+		loadProfileButton = new JButton("Load Profile");
+		profileSelect.setEditable(false);
+		
+		//Set button size
+		newProfileButton.setPreferredSize(new Dimension(300, 50));
+		selectProfileButton.setPreferredSize(new Dimension(300, 50));
+		loadProfileButton.setPreferredSize(new Dimension(300, 50));
+		//Add action listeners
+		newProfileButton.addActionListener(new newProfileListener());
+		selectProfileButton.addActionListener(new selectProfileListener());
+		loadProfileButton.addActionListener(null);
+		//Load panel
 		welcomeWindow.add(welcomeLabel);
+		welcomeWindow.add(newProfileButton);
+		welcomeWindow.add(selectProfileButton);
+		welcomeWindow.add(profileSelect);
+		welcomeWindow.add(loadProfileButton);
 	}
-	
+		
 	public void profileWelcomeWindow() {
+		//TODO add middle action and window to welcome a user before displaying information.
+		//Should go load/new -> WELCOME *NAME* (with continue button) -> page display info
 		profileWelcomeLabel = new JLabel("Personal Budget Calculator!");
 		profileWelcomeWindow = new JPanel();
 		profileWelcomeWindow.add(profileWelcomeLabel);
@@ -100,7 +117,7 @@ public class Budget extends JFrame {
 		incomeWindow = new JPanel();
 		incomeWindow.setLayout(new BorderLayout());
 		JPanel values = new IncomePanel(profile);
-		incomeLabel = new JLabel("Personal Budget Calculator!");
+		incomeLabel = new JLabel("Your Gross and Taxed Incomes:");
 		incomeWindow.add(incomeLabel, BorderLayout.NORTH);
 		incomeWindow.add(values, BorderLayout.WEST);
 	}
@@ -141,6 +158,22 @@ public class Budget extends JFrame {
 		}
 	}
 	
+	private class selectProfileListener implements ActionListener {		
+		private String profile;
+		
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser chooser = new JFileChooser("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Budget Profiles", "profile");
+			chooser.setFileFilter(filter);
+			int status = chooser.showOpenDialog(null);
+			if(status == JFileChooser.APPROVE_OPTION) {
+				profile = chooser.getSelectedFile().getName();
+				profileSelect.setText(profile.replaceAll(".profile", ""));
+				loadProfileButton.addActionListener(new loadProfileListener(profileSelect.getText()));
+			}
+		}
+	}
+	
 	private class loadProfileListener implements ActionListener {
 		private String profileToLoad;
 		
@@ -149,8 +182,10 @@ public class Budget extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			//Sets private File var to the selected profile
-			profile = new File("C:\\Users\\Dodongos\\git\\Budget\\" + profileToLoad + ".profile");
+			profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
+			setSize(500, 700);
 			remove(welcomeWindow);
+			setLayout(new GridLayout(6,1));
 			incomeWindow();
 			/**
 			profileWelcomeWindow();
@@ -184,20 +219,6 @@ public class Budget extends JFrame {
 			
 		}
 	}
-	
-	/**
-	private class buttonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			String input;
-			double salary;
-			
-			input = textField.getText();
-			salary = Double.parseDouble(input) / 1000;
-			//insert to text file to store input
-			JOptionPane.showMessageDialog(null, "Your Salary has been stored as $" + salary + "k per year");
-		}
-	} 
-	**/
 }
 
 
