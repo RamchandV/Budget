@@ -2,42 +2,33 @@ import java.io.*;
 import java.util.*;
 
 class ProfileFunctions {
-	public static void main(String[] args) throws IOException {
-		loadProfile();
-	}
+	File profile;
 	
-	public static void loadProfile() throws IOException {
-		Scanner keyboard = new Scanner(System.in); 
-		System.out.println("Please enter a profile name:");
-		String profileName = keyboard.nextLine();
-		profileName += ".txt";
+	/**
+	 String profileName = keyboard.nextLine();
+		profileName += ".profile";
 		
 		File profile = new File(profileName);
-		
-		if(profile.exists()) {
-			System.out.println("PROFILE FOUND, LOADING.....");
-			//TODO Load all user info and display results
-			loadProfileInfo(profile);
-		} else {
-			System.out.println("PROFILE NOT FOUND");
-			//TODO Ask user for all profile info
-			getProfileInfo(profile, keyboard);
-			loadProfileInfo(profile);
+	**/
+	public ProfileFunctions(File toLoad) throws IOException {		
+		if(toLoad.exists()) {
+			loadProfileInfo(toLoad);
 		}
-		keyboard.close();
 	}
 	
-	public static void loadProfileInfo(File profile) throws IOException {
+	public void loadProfileInfo(File profile) throws IOException {
 		Math math = new Math();
 		BufferedReader reader = new BufferedReader(new FileReader(profile));
 		String line;
 		while ((line = reader.readLine()) != null){
 			System.out.println(line);
 		}
+		/**
 		System.out.println("Your monthly bills total to: " + math.totalAmount("monthlyBill:", profile));
 		System.out.println("Your required payments total to: " + math.totalAmount("requiredPayment:", profile));
 		System.out.println("Your wish list totals to: " + math.totalAmount("wishlistItem:", profile));
 		System.out.println("Your purchased groceries total to: " + math.totalAmount("groceryPurchase:", profile));
+		**/
 		reader.close();
 	}
 	
