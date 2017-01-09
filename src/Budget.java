@@ -111,45 +111,6 @@ public class Budget extends JFrame {
 		profileWelcomeWindow = new JPanel();
 		profileWelcomeWindow.add(profileWelcomeLabel);
 	}
-	
-	public void incomeWindow() {
-		incomeWindow = new JPanel();
-		incomeWindow.setLayout(new BorderLayout());
-		JPanel values = new IncomePanel(profile);
-		incomeLabel = new JLabel("Your Gross and Taxed Incomes:");
-		incomeWindow.add(incomeLabel, BorderLayout.NORTH);
-		incomeWindow.add(values, BorderLayout.WEST);
-	}
-	
-	public void spendingWindow() {
-		spendingLabel = new JLabel("Personal Budget Calculator!");
-		spendingWindow = new JPanel();
-		spendingWindow.add(spendingLabel);
-	}
-	
-	public void billsWindow() {
-		billsLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		billsWindow = new JPanel();
-		billsWindow.add(billsLabel);
-	}
-	
-	public void paymentsWidnow() {
-		paymentsLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		paymentsWindow = new JPanel();
-		paymentsWindow.add(paymentsLabel);
-	}
-	
-	public void groceryWindow() {
-		groceryLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		groceryWindow = new JPanel();
-		groceryWindow.add(groceryLabel);
-	}
-	
-	public void wishlistWindow() {
-		wishlistLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		wishlistWindow = new JPanel();
-		wishlistWindow.add(wishlistLabel);
-	}
 		
 	private class newProfileListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -157,16 +118,14 @@ public class Budget extends JFrame {
 		}
 	}
 	
-	private class selectProfileListener implements ActionListener {		
-		private String profile;
-		
+	private class selectProfileListener implements ActionListener {				
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser chooser = new JFileChooser("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\");
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("Budget Profiles", "profile");
 			chooser.setFileFilter(filter);
 			int status = chooser.showOpenDialog(null);
 			if(status == JFileChooser.APPROVE_OPTION) {
-				profile = chooser.getSelectedFile().getName();
+				String profile = chooser.getSelectedFile().getName();
 				profileSelect.setText(profile.replaceAll(".profile", ""));
 				loadProfileButton.addActionListener(new loadProfileListener(profileSelect.getText()));
 			}
@@ -182,12 +141,8 @@ public class Budget extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			//Sets private File var to the selected profile
 			profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
-			//Add edit menu item
-			JMenuItem editAction = new JMenuItem("Edit");
-			profileMenu.add(editAction);
-			editAction.addActionListener(new editProfileListener());
 			//Set Window sizing and format
-			setSize(500, 700);
+			setSize(500, 800);
 			GridLayout layout = new GridLayout(7,1);
 			layout.setVgap(10);
 			setLayout(layout);
@@ -195,12 +150,12 @@ public class Budget extends JFrame {
 			remove(welcomeWindow);
 			//Create new panels
 			nameWindow = new ProfileName(profile);
-			incomeWindow();
+			incomeWindow = new IncomePanel(profile);
+			billsWindow = new BillsPanel(profile);
 			
 			/**
 			profileWelcomeWindow();
 			spendingWindow();
-			billsWindow();
 			paymentsWidnow();
 			groceryWindow();
 			wishlistWindow();
@@ -214,6 +169,7 @@ public class Budget extends JFrame {
 			**/
 			add(nameWindow);
 			add(incomeWindow);
+			add(billsWindow);
 			repaint();
 			setVisible(true);
 		}
@@ -237,12 +193,6 @@ public class Budget extends JFrame {
 			welcomeWindow();
 			add(welcomeWindow, BorderLayout.CENTER);
 			setVisible(true);
-			
-		}
-	}
-	
-	private class editProfileListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
 			
 		}
 	}
