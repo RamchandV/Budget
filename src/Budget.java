@@ -8,9 +8,10 @@ import java.awt.event.*;
 public class Budget extends JFrame {
 	public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
+	private JMenu profileMenu, loadProfileMenu, editMenu;
 	private JPanel welcomeWindow, profileWelcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow; 
 	private JLabel welcomeLabel, profileWelcomeLabel, incomeLabel, monthlyIncomeLabel, weeklyIncomeLabel, spendingLabel, billsLabel, paymentsLabel, groceryLabel, wishlistLabel;
-	private JButton newProfileButton, selectProfileButton, loadProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
+	private JButton newProfileButton, selectProfileButton, loadProfileButton, editProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
 	private JTextField profileSelect = new JTextField(27);
 	private NewWindow newProfile;
 	
@@ -44,9 +45,9 @@ public class Budget extends JFrame {
 		existingProfiles = profilesArray.toArray(existingProfiles);
 		
 		//Initialize Menu Bar Dropdowns
-		JMenu profileMenu = new JMenu("Profile");
-		JMenu loadProfileMenu = new JMenu("Load");
-		JMenu editMenu = new JMenu("Edit");
+		profileMenu = new JMenu("Profile");
+		loadProfileMenu = new JMenu("Load");
+		editMenu = new JMenu("Edit");
 		
 		//Initialize Buttons for Dropdowns
 		JMenuItem newAction = new JMenuItem("New");
@@ -181,6 +182,10 @@ public class Budget extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			//Sets private File var to the selected profile
 			profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
+			//Add edit menu item
+			JMenuItem editAction = new JMenuItem("Edit");
+			profileMenu.add(editAction);
+			editAction.addActionListener(new editProfileListener());
 			setSize(500, 700);
 			remove(welcomeWindow);
 			setLayout(new GridLayout(6,1));
@@ -224,6 +229,12 @@ public class Budget extends JFrame {
 			welcomeWindow();
 			add(welcomeWindow, BorderLayout.CENTER);
 			setVisible(true);
+			
+		}
+	}
+	
+	private class editProfileListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 			
 		}
 	}

@@ -1,20 +1,24 @@
 import javax.swing.*;
+
+import java.awt.GridLayout;
 import java.io.*;
 
 public class NewWindow extends JFrame {
 	private JPanel windowPanel;
 	private JLabel windowLabel;
+	private File profile; 
 	
-	public NewWindow(String windowType, File profile) {
+	public NewWindow(String windowType, File profileIn) {
+		profile = profileIn;
 		switch(windowType){
 		case "newProfile":
 			setTitle("New Profile");
-			setSize(600, 400);
+			setSize(400, 400);
 			newProfileWindow();
 			add(windowPanel);
 			setVisible(true);
 			break;
-		case "loadProfile":
+		case "editProfile":
 			setTitle("Load Profile");
 			setSize(320, 400);
 			loadProfileWindow();
@@ -25,9 +29,12 @@ public class NewWindow extends JFrame {
 	}
 	
 	public void newProfileWindow() {
+		IncomePanel income = new IncomePanel(profile);
 		windowLabel = new JLabel("Please enter your new profile details:");
 		windowPanel = new JPanel();
+		windowPanel.setLayout(new GridLayout(6,1));
 		windowPanel.add(windowLabel);
+		windowPanel.add(income);
 	}
 	
 	public void loadProfileWindow() {
