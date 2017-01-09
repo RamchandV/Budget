@@ -1,10 +1,9 @@
-profileName:Chilirn
-yearlyGross:69000
-yearlyIncome:51000
-monthlyIncome:3800
-weeklyIncome:984
-hourlyGross:33.3
-hourlyIncome:22.4
+yearlyGross:100000
+yearlyIncome:66000
+monthlyIncome:5500
+weeklyIncome:1375
+hourlyGross:34.375
+hourlyIncome:48.076
 monthlyBill:Water:80
 monthlyBill:Gas:30
 monthlyBill:WoW:15

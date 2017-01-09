@@ -9,23 +9,30 @@ public class IncomePanel extends JPanel {
 	private JTextField[] newTextArray = new JTextField[2];
 	private String[] loadLabels = {"Yearly gross income: ", "Yearly taxed income: ", "Monthly taxed income: ", "Weekly taxed income: ", "Hourly gross income: ", "Hourly taxed income: "};
 	private String[] newLabels = {"Yearly gross income: ", "Hourly Taxed Income: "};
+	private BufferedReader reader;
 	
 	public IncomePanel(File profile) {
-		if(profile == null) {
-			buildArrays();
-			setLayout(new GridLayout(newLabels.length,2));
-			for(int i = 0;i < newLabels.length; i++) {
-				add(newLabelArray[i]);
-				add(newTextArray[i]);
+		try {
+			reader = new BufferedReader(new FileReader(profile));
+			if(reader.readLine() == null) {
+				buildArrays();
+				setLayout(new GridLayout(newLabels.length,2));
+				for(int i = 0;i < newLabels.length; i++) {
+					add(newLabelArray[i]);
+					add(newTextArray[i]);
+				}
+			} else {
+				buildArrays(profile);
+				setLayout(new GridLayout(loadLabels.length,2));
+				for(int i = 0; i < loadLabels.length; i++) {
+					add(loadLabelArray[i]);
+					add(loadTextArray[i]);
+				}
 			}
-		} else {
-			buildArrays(profile);
-			setLayout(new GridLayout(loadLabels.length,2));
-			for(int i = 0; i < loadLabels.length; i++) {
-				add(loadLabelArray[i]);
-				add(loadTextArray[i]);
-			}
+		} catch (IOException e) {
+			
 		}
+		
 		
 	}
 	
@@ -39,7 +46,7 @@ public class IncomePanel extends JPanel {
 	}
 	
 	private void buildArrays(File profile) {
-		BufferedReader reader;
+		
 		try {
 			reader = new BufferedReader(new FileReader(profile));
 			String line;

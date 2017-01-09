@@ -6,20 +6,17 @@ import javax.swing.*;
 
 public class BillsPanel extends JPanel {
 	private JLabel totalLabel = new JLabel("Bills Total: ");
-	private JTextField totalBox = new JTextField();
+	private JTextField totalBox;
 	private JButton viewButton;
 	public BillsPanel(File profile) {
-		if(profile == null) {
-			
-		} else {
-			viewButton = new JButton("View");
-			viewButton.addActionListener(new viewButtonListener(profile));
-			setLayout(new GridLayout(2,2));
-			add(totalLabel);
-			//TODO Add calculation and setText() to totalBox
-			add(totalBox);
-			add(viewButton);
-		}
+		totalBox = new JTextField(BillsFunctions.totalBills(profile));
+		totalBox.setEditable(false);
+		viewButton = new JButton("View");
+		viewButton.addActionListener(new viewButtonListener(profile));
+		setLayout(new GridLayout(2,2));
+		add(totalLabel);
+		add(totalBox);
+		add(viewButton);
 	}
 	
 	private class viewButtonListener implements ActionListener {
@@ -29,7 +26,7 @@ public class BillsPanel extends JPanel {
 			profile = profileIn;
 		}
 		public void actionPerformed(ActionEvent e) {
-			NewWindow viewWindow = new NewWindow("billsView", profile);
+			ViewBillsWindow viewWindow = new ViewBillsWindow(profile);
 		}
 	}
 }

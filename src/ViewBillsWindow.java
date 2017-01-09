@@ -4,59 +4,41 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
-public class NewWindow extends JFrame {
-	private JPanel windowPanel;
-	private JLabel windowLabel;
+public class ViewBillsWindow extends JFrame {
+	private JPanel windowPanel, addPanel;
+	private JTextField newNameField, newAmountField;
 	private JButton addBillButton, removeBillButton, doneButton;
 	private File profile; 
 	
-	public NewWindow(String windowType, File profileIn) {
+	public ViewBillsWindow(File profileIn) {
 		profile = profileIn;
-		switch(windowType){
-		case "newProfile":
-			setTitle("New Profile");
-			setSize(400, 400);
-			newProfileWindow();
-			add(windowPanel);
-			setVisible(true);
-			break;
-		case "billsView":
-			setTitle("View Bills");
-			setSize(300, 350);
-			billsViewWindow();
-			add(windowPanel);
-			setVisible(true);
-			break;
-		}
+		setTitle("Bills details:");
+		setSize(300, 350);
+		setLocationRelativeTo(null);
+		billsViewWindow();
+		add(windowPanel);
+		setVisible(true);
 	}
-	
-	public void newProfileWindow() {
-		ProfileName name = new ProfileName(profile);
-		IncomePanel income = new IncomePanel(profile);
-		windowLabel = new JLabel("Please enter your new profile details:");
-		windowPanel = new JPanel();
-		GridLayout layout = new GridLayout(7,1);
-		layout.setVgap(10);
-		windowPanel.setLayout(layout);
-		windowPanel.add(windowLabel);
-		windowPanel.add(name);
-		windowPanel.add(income);
-	}
-	
+		
 	public void billsViewWindow() {
 		JPanel billsList = createBillsList();
 		//create components
-		windowLabel = new JLabel("Bills details:");
+		newNameField = new JTextField(8);
+		newAmountField = new JTextField(8);
 		addBillButton = new JButton("Add");
 		doneButton = new JButton("Done");
 		windowPanel = new JPanel();
+		addPanel = new JPanel();
+		addPanel.setLayout(new GridLayout(1,3));
 		//create button listener links
-		addBillButton.addActionListener(new addBillButtonListener(profile));
+		addBillButton.addActionListener(new addBillButtonListener(profile, newNameField, newAmountField));
 		doneButton.addActionListener(new doneBillsButtonListener(profile));	
 		//add components
-		windowPanel.add(windowLabel);
+		addPanel.add(newNameField);
+		addPanel.add(newAmountField);
+		addPanel.add(addBillButton);
 		windowPanel.add(billsList);
-		windowPanel.add(addBillButton);
+		windowPanel.add(addPanel);
 		windowPanel.add(doneButton);
 	}
 	
@@ -78,12 +60,22 @@ public class NewWindow extends JFrame {
 	
 	private class addBillButtonListener implements ActionListener {
 		private File profile;
-		public addBillButtonListener(File profileIn) {
+		private String newName, newAmount;
+		public addBillButtonListener(File profileIn, JTextField name, JTextField amount) {
 			profile = profileIn;
+			newName = name.getText();
+			newAmount = amount.getText();
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			
+			BufferedWriter writer;
+			try {
+				FileWriter stream = new FileWriter(profile, true);
+				writer = new BufferedWriter(stream);
+				writer.write("monthlyBill:" + newName + ":" + newAmount);
+			} catch (IOException ex) {
+				System.out.println(ex);
+			}
 		}
 	}
 	
@@ -94,7 +86,20 @@ public class NewWindow extends JFrame {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			
+			BufferedReader reader;
+			try {
+				reader = new BufferedReader(new FileReader(profile));
+				String line;
+				String[] strArry;
+				while ((line = reader.readLine()) != null) {
+					strArry = line.split(":");
+					if(line.startsWith("monthlyBill:")){
+						
+					}
+				}
+			} catch (IOException ex) {
+				System.out.println(ex);
+			}
 		}
 	}
 	
@@ -105,7 +110,20 @@ public class NewWindow extends JFrame {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-
+			BufferedReader reader;
+			try {
+				reader = new BufferedReader(new FileReader(profile));
+				String line;
+				String[] strArry;
+				while ((line = reader.readLine()) != null) {
+					strArry = line.split(":");
+					if(line.startsWith("monthlyBill:")){
+						
+					}
+				}
+			} catch (IOException ex) {
+				System.out.println(ex);
+			}
 		}
 	}
 }

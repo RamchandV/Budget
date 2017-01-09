@@ -9,11 +9,10 @@ public class Budget extends JFrame {
 	public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu profileMenu, loadProfileMenu, editMenu;
-	private JPanel welcomeWindow, profileWelcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow, nameWindow; 
-	private JLabel welcomeLabel, profileWelcomeLabel, incomeLabel, monthlyIncomeLabel, weeklyIncomeLabel, spendingLabel, billsLabel, paymentsLabel, groceryLabel, wishlistLabel;
+	private JPanel welcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow, nameWindow; 
+	private JLabel welcomeLabel;
 	private JButton newProfileButton, selectProfileButton, loadProfileButton, editProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
 	private JTextField profileSelect = new JTextField(27);
-	private NewWindow newProfile;
 	
 	public Budget() {
 		setupMenuBar();
@@ -105,16 +104,12 @@ public class Budget extends JFrame {
 	}
 		
 	public void profileWelcomeWindow() {
-		//TODO add middle action and window to welcome a user before displaying information.
-		//Should go load/new -> WELCOME *NAME* (with continue button) -> page display info
-		profileWelcomeLabel = new JLabel("Personal Budget Calculator!");
-		profileWelcomeWindow = new JPanel();
-		profileWelcomeWindow.add(profileWelcomeLabel);
+		ProfileWelcomeWindow profileWelcome = new ProfileWelcomeWindow(profile);
 	}
 		
 	private class newProfileListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			newProfile = new NewWindow("newProfile", profile);
+			profileWelcomeWindow();
 		}
 	}
 	
@@ -141,6 +136,8 @@ public class Budget extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			//Sets private File var to the selected profile
 			profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
+			//Display Welcome Window
+			profileWelcomeWindow();
 			//Set Window sizing and format
 			setSize(500, 800);
 			GridLayout layout = new GridLayout(7,1);
@@ -148,6 +145,9 @@ public class Budget extends JFrame {
 			setLayout(layout);
 			//clear existing window
 			remove(welcomeWindow);
+			if(nameWindow != null){remove(nameWindow);}
+			if(incomeWindow != null){remove(incomeWindow);}
+			if(billsWindow != null){remove(billsWindow);}
 			//Create new panels
 			nameWindow = new ProfileName(profile);
 			incomeWindow = new IncomePanel(profile);
@@ -177,13 +177,15 @@ public class Budget extends JFrame {
 	
 	private class clearActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			//clear old profile
 			remove(nameWindow);
 			remove(incomeWindow);
+			remove(billsWindow);
+			//clear text box
 			profileSelect.setText("");
 			/**
 			profileWelcomeWindow();
 			spendingWindow();
-			billsWindow();
 			paymentsWidnow();
 			groceryWindow();
 			wishlistWindow();
