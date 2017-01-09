@@ -21,7 +21,7 @@ public class NewWindow extends JFrame {
 		case "editProfile":
 			setTitle("Load Profile");
 			setSize(320, 400);
-			loadProfileWindow();
+			editProfileWindow();
 			add(windowPanel);
 			setVisible(true);
 			break;
@@ -29,15 +29,19 @@ public class NewWindow extends JFrame {
 	}
 	
 	public void newProfileWindow() {
+		ProfileName name = new ProfileName(profile);
 		IncomePanel income = new IncomePanel(profile);
 		windowLabel = new JLabel("Please enter your new profile details:");
 		windowPanel = new JPanel();
-		windowPanel.setLayout(new GridLayout(6,1));
+		GridLayout layout = new GridLayout(7,1);
+		layout.setVgap(10);
+		windowPanel.setLayout(layout);
 		windowPanel.add(windowLabel);
+		windowPanel.add(name);
 		windowPanel.add(income);
 	}
 	
-	public void loadProfileWindow() {
+	public void editProfileWindow() {
 		windowLabel = new JLabel("Please select a profile from the list below:");
 		windowPanel = new JPanel();
 		windowPanel.add(windowLabel);

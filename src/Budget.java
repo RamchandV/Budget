@@ -9,7 +9,7 @@ public class Budget extends JFrame {
 	public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu profileMenu, loadProfileMenu, editMenu;
-	private JPanel welcomeWindow, profileWelcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow; 
+	private JPanel welcomeWindow, profileWelcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow, nameWindow; 
 	private JLabel welcomeLabel, profileWelcomeLabel, incomeLabel, monthlyIncomeLabel, weeklyIncomeLabel, spendingLabel, billsLabel, paymentsLabel, groceryLabel, wishlistLabel;
 	private JButton newProfileButton, selectProfileButton, loadProfileButton, editProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
 	private JTextField profileSelect = new JTextField(27);
@@ -186,9 +186,15 @@ public class Budget extends JFrame {
 			JMenuItem editAction = new JMenuItem("Edit");
 			profileMenu.add(editAction);
 			editAction.addActionListener(new editProfileListener());
+			//Set Window sizing and format
 			setSize(500, 700);
+			GridLayout layout = new GridLayout(7,1);
+			layout.setVgap(10);
+			setLayout(layout);
+			//clear existing window
 			remove(welcomeWindow);
-			setLayout(new GridLayout(6,1));
+			//Create new panels
+			nameWindow = new ProfileName(profile);
 			incomeWindow();
 			
 			/**
@@ -206,7 +212,7 @@ public class Budget extends JFrame {
 			add(groceryWindow);
 			add(wishlistWindow);
 			**/
-			
+			add(nameWindow);
 			add(incomeWindow);
 			repaint();
 			setVisible(true);
@@ -215,7 +221,9 @@ public class Budget extends JFrame {
 	
 	private class clearActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			remove(nameWindow);
 			remove(incomeWindow);
+			profileSelect.setText("");
 			/**
 			profileWelcomeWindow();
 			spendingWindow();

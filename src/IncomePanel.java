@@ -35,7 +35,6 @@ public class IncomePanel extends JPanel {
 		}
 		for(int i = 0; i < newLabels.length; i++) {
 			newTextArray[i] = new JTextField("");
-			newTextArray[i].setEditable(true);
 		}
 	}
 	
