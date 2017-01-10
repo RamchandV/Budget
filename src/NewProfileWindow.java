@@ -41,7 +41,7 @@ public class NewProfileWindow extends JFrame {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			ViewBillsWindow viewWindow = new ViewBillsWindow(profile);
+			BillsEditWindow viewWindow = new BillsEditWindow(profile);
 		}
 	}
 }
