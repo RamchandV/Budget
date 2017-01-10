@@ -5,9 +5,10 @@ import java.io.*;
 import java.util.*;
 
 public class ViewBillsWindow extends JFrame {
-	private JPanel windowPanel, addPanel;
+	private JPanel windowPanel, addPanel, billsList;
 	private JTextField newNameField, newAmountField;
 	private JButton addBillButton, removeBillButton, doneButton;
+	private HashMap<String, String> billsMap;
 	private File profile; 
 	
 	public ViewBillsWindow(File profileIn) {
@@ -21,7 +22,7 @@ public class ViewBillsWindow extends JFrame {
 	}
 		
 	public void billsViewWindow() {
-		JPanel billsList = createBillsList();
+		billsList = createBillsList();
 		//create components
 		newNameField = new JTextField(8);
 		newAmountField = new JTextField(8);
@@ -43,7 +44,7 @@ public class ViewBillsWindow extends JFrame {
 	}
 	
 	public JPanel createBillsList() {
-		HashMap<String, String> billsMap = BillsFunctions.getCurrentBills(profile);
+		billsMap = BillsFunctions.getCurrentBills(profile);
 		JPanel list = new JPanel();
 		list.setLayout(new GridLayout(billsMap.size(),3));
 		for(Map.Entry<String, String> entry : billsMap.entrySet()) {
@@ -60,21 +61,39 @@ public class ViewBillsWindow extends JFrame {
 	
 	private class addBillButtonListener implements ActionListener {
 		private File profile;
-		private String newName, newAmount;
-		public addBillButtonListener(File profileIn, JTextField name, JTextField amount) {
+		private JTextField name, amount;
+		public addBillButtonListener(File profileIn, JTextField nameIn, JTextField amountIn) {
 			profile = profileIn;
-			newName = name.getText();
-			newAmount = amount.getText();
+			name = nameIn;
+			amount = amountIn;
 		}
 		
 		public void actionPerformed(ActionEvent e) {
 			BufferedWriter writer;
-			try {
-				FileWriter stream = new FileWriter(profile, true);
-				writer = new BufferedWriter(stream);
-				writer.write("monthlyBill:" + newName + ":" + newAmount);
-			} catch (IOException ex) {
-				System.out.println(ex);
+			String newName = name.getText();
+			String newAmount = amount.getText();
+			if(newName.equals("") || newAmount.equals("")) {
+				JLabel error = new JLabel("Please enter a bill name and amount:");
+				windowPanel.add(error);
+	    		repaint();
+				setVisible(true);
+			} else {
+				try {
+					FileWriter stream = new FileWriter(profile, true);
+					writer = new BufferedWriter(stream);
+					writer.write("monthlyBill:" + newName + ":" + newAmount + "\n");
+					writer.flush();
+					writer.close();
+					name.setText("");
+					amount.setText("");
+				} catch (IOException ex) {
+					System.out.println(ex);
+				}
+				windowPanel.remove(billsList);
+				billsList = createBillsList();
+				windowPanel.add(billsList);
+				windowPanel.repaint();
+				setVisible(true);
 			}
 		}
 	}
@@ -86,10 +105,13 @@ public class ViewBillsWindow extends JFrame {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
+			File tempFile = new File("TempProfile.txt");
 			BufferedReader reader;
+			BufferedWriter writer;
 			try {
 				reader = new BufferedReader(new FileReader(profile));
-				String line;
+				writer = new BufferedWriter(new FileWriter(tempFile));
+				String currentLine;
 				String[] strArry;
 				while ((line = reader.readLine()) != null) {
 					strArry = line.split(":");
