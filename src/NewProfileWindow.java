@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 public class NewProfileWindow extends JFrame {
-	private JPanel windowPanel;
+	private JPanel windowPanel, newProfilePanel;
 	private JLabel windowLabel;
 	private JButton billsButton;
 	private File profile; 
@@ -41,7 +41,7 @@ public class NewProfileWindow extends JFrame {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			BillsEditWindow viewWindow = new BillsEditWindow(profile);
+			BillsEditWindow viewWindow = new BillsEditWindow(profile, null);
 		}
 	}
 }

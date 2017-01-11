@@ -8,7 +8,10 @@ public class BillsPanel extends JPanel {
 	private JLabel totalLabel = new JLabel("Bills Total: ");
 	private JTextField totalBox;
 	private JButton viewButton;
+	private JPanel billsPanel;
+	private File profile;
 	public BillsPanel(File profile) {
+		billsPanel = this;
 		totalBox = new JTextField(BillsFunctions.totalBills(profile));
 		totalBox.setEditable(false);
 		viewButton = new JButton("View");
@@ -19,6 +22,13 @@ public class BillsPanel extends JPanel {
 		add(viewButton);
 	}
 	
+	public void reloadFile(File profile) {
+		String profilePath = profile.getAbsolutePath();
+		this.profile = null;
+		revalidate();
+		repaint();
+	}
+	
 	private class viewButtonListener implements ActionListener {
 		private File profile;
 		
@@ -26,7 +36,7 @@ public class BillsPanel extends JPanel {
 			profile = profileIn;
 		}
 		public void actionPerformed(ActionEvent e) {
-			BillsEditWindow viewWindow = new BillsEditWindow(profile);
+			BillsEditWindow viewWindow = new BillsEditWindow(profile, billsPanel);
 		}
 	}
 }

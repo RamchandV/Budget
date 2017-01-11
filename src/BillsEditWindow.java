@@ -6,80 +6,68 @@ import java.io.*;
 import java.util.*;
 
 public class BillsEditWindow extends JFrame {
-	private JPanel billsListPanel, donePanel;
+	private JPanel donePanel, caller;
 	private JButton doneButton;
-	private HashMap<String, String> billsMap;
+	private HashMap<String, String> billsMap, finishedMap;
 	private File profile;
+	private OutgoingList billsListPanel;
 	
-	public BillsEditWindow(File profile) {
+	public BillsEditWindow(File profile, JPanel caller) {
 		this.profile = profile;
+		this.caller = caller;
 		setTitle("Bills details:");
 		setSize(350, 350);
 		setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
-		billsListPanel = billsList();
-		donePanel = donePanel();
+		billsList();
+		donePanel();
 		add(billsListPanel);
 		add(donePanel, BorderLayout.SOUTH);
 		setVisible(true);
 	}
 	
-	public JPanel billsList() {
+	public void billsList() {
 		billsMap = BillsFunctions.getCurrentBills(profile);
-		return new OutgoingList(billsMap);
+		billsListPanel = new OutgoingList(billsMap);
 	}
 	
-	public JPanel donePanel() {
-		JPanel panel = new JPanel();
+	public void donePanel() {
+		donePanel = new JPanel();
 		doneButton = new JButton("Done");
 		doneButton.addActionListener(new doneListener());
-		panel.add(doneButton);
-		return panel;
+		donePanel.add(doneButton);
 	}
 	
 	private class doneListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			String profilePath = profile.getAbsolutePath();
+			File tempProfile = new File(profilePath + ".tmp");
+			finishedMap = billsListPanel.getAllElements();			
 			BufferedReader reader;
+			BufferedWriter writer;
 			try {
-				/**
-				 * BufferedWriter writer;
-			String newName = name.getText();
-			String newAmount = amount.getText();
-			if(newName.equals("") || newAmount.equals("")) {
-				JLabel error = new JLabel("Please enter a bill name and amount:");
-				add(error);
-	    		repaint();
-				setVisible(true);
-			} else {
-				try {
-					FileWriter stream = new FileWriter(profile, true);
-					writer = new BufferedWriter(stream);
-					writer.write("monthlyBill:" + newName + ":" + newAmount + "\n");
-					writer.flush();
-					writer.close();
-					name.setText("");
-					amount.setText("");
-				} catch (IOException ex) {
-					System.out.println(ex);
-				}
-				//remove(billsList);
-				//billsList = createBillsList();
-				//windowPanel.add(billsList);
-				//windowPanel.repaint();
-				//setVisible(true);
-			}
-				 */
 				reader = new BufferedReader(new FileReader(profile));
+				writer = new BufferedWriter(new FileWriter(tempProfile));
 				String line;
-				String[] strArry;
 				while ((line = reader.readLine()) != null) {
-					strArry = line.split(":");
 					if(line.startsWith("monthlyBill:")){
-						
+						continue;
+					} else {
+						writer.write(line + "\n");
 					}
 				}
+				for(Map.Entry<String, String> entry : finishedMap.entrySet()) {
+					writer.write("monthlyBill:" + entry.getKey() + ":" + entry.getValue() + "\n");
+				}
+				reader.close();
+				writer.flush();
+				writer.close();
 			} catch (IOException ex) {
 				System.out.println(ex);
+			}
+			if(caller != null){
+				caller.reloadFile(profile);
+				dispose();
 			}
 		}
 	}
