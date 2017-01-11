@@ -3,44 +3,35 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class BillsFunctions {
-	public static HashMap<String,String> getCurrentBills(File profile) {
+	
+	public static HashMap<String,String> getCurrentBills(ProfileContents profile) {
 		HashMap<String,String> bills = new HashMap<String,String>();
 		if(profile != null) {
-			BufferedReader reader;
-			try {
-				reader = new BufferedReader(new FileReader(profile));
-				String line;
-				String[] strArry;
-				while ((line = reader.readLine()) != null) {
-					strArry = line.split(":");
-					if(line.startsWith("monthlyBill:")){
-						bills.put(strArry[1], strArry[2]);
-					}
+			for(HashMap.Entry<String,List<String>> element : profile.entrySet()) {
+				if(element.getKey().equals("monthlyBill:")){
+					for(String entry : element.getValue()){
+						String[] ary = entry.split(":");
+						bills.put(ary[0], ary[1]);
+					}					
 				}
-			} catch (IOException e) {
-				System.out.println(e);
 			}
 		}
 		return bills;
-}
+	}
 	
-	public static String totalBills(File profile) {
+	public static String totalBills(ProfileContents profile) {
 		double bills = 0;
-		BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader(profile));
-			String line;
-			String[] strArry;
-			while ((line = reader.readLine()) != null) {
-				strArry = line.split(":");
-				if(line.startsWith("monthlyBill:")){
-					bills += Double.parseDouble(strArry[2]);
-				}
+		for(HashMap.Entry<String,List<String>> element : profile.entrySet()) {
+			if(element.getKey().equals("monthlyBill:")){
+				for(String entry : element.getValue()){
+					String[] ary = entry.split(":");
+					bills += Double.parseDouble(ary[1]);
+				}					
+
 			}
-		} catch (IOException e) {
-			System.out.println(e);
 		}
 		return Double.toString(bills);
 	}

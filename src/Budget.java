@@ -6,13 +6,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Budget extends JFrame {
-	public File profile; 
+	//public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu profileMenu, loadProfileMenu, editMenu;
-	private JPanel welcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow, nameWindow; 
+	private JPanel welcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow, nameWindow, savePanel; 
 	private JLabel welcomeLabel;
-	private JButton newProfileButton, selectProfileButton, loadProfileButton, editProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
+	private JButton newProfileButton, selectProfileButton, loadProfileButton, saveButton;
 	private JTextField profileSelect = new JTextField(27);
+	private ProfileContents profile;
 	
 	public Budget() {
 		setupMenuBar();
@@ -25,6 +26,10 @@ public class Budget extends JFrame {
 		welcomeWindow();
 		add(welcomeWindow, BorderLayout.CENTER);
 		setVisible(true);
+	}
+	
+	private void setProfile(ProfileContents toSet) {
+		this.profile = toSet;
 	}
 	
 	public void setupMenuBar() {
@@ -102,9 +107,55 @@ public class Budget extends JFrame {
 		welcomeWindow.add(profileSelect);
 		welcomeWindow.add(loadProfileButton);
 	}
+	
+	public void profileViewWindow(String profileToLoad) {
+		//Sets private File var to the selected profile
+		File toLoad = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
+		profile = new ProfileContents(toLoad);
+		setProfile(profile);
+		toLoad = null;
+		//Display Welcome Window
+		profileWelcomeWindow();
+		//Set Window sizing and format
+		setSize(500, 800);
+		GridLayout layout = new GridLayout(7,1);
+		layout.setVgap(10);
+		setLayout(layout);
+		//clear existing window
+		remove(welcomeWindow);
+		if(nameWindow != null){remove(nameWindow);}
+		if(incomeWindow != null){remove(incomeWindow);}
+		if(billsWindow != null){remove(billsWindow);}
+		//Create new panels
+		nameWindow = new ProfileName(profile);
+		incomeWindow = new IncomePanel(profile);
+		billsWindow = new BillsPanel(profile);
+		savePanel = new SaveProfile(profile, this);
 		
+		/**
+		profileWelcomeWindow();
+		spendingWindow();
+		paymentsWidnow();
+		groceryWindow();
+		wishlistWindow();
+
+		add(incomeWindow);
+		add(spendingWindow);
+		add(billsWindow);
+		add(paymentsWindow);
+		add(groceryWindow);
+		add(wishlistWindow);
+		**/
+		add(nameWindow);
+		add(incomeWindow);
+		add(billsWindow);
+		add(savePanel, BorderLayout.SOUTH);
+		repaint();
+		setVisible(true);
+	}
+	
 	public void profileWelcomeWindow() {
-		ProfileWelcomeWindow profileWelcome = new ProfileWelcomeWindow(profile);
+		ProfileWelcomeWindow profileWelcome = new ProfileWelcomeWindow(this.profile);
 	}
 		
 	private class newProfileListener implements ActionListener {
@@ -134,44 +185,7 @@ public class Budget extends JFrame {
 			profileToLoad = profileName;
 		}
 		public void actionPerformed(ActionEvent e) {
-			//Sets private File var to the selected profile
-			profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
-			//Display Welcome Window
-			profileWelcomeWindow();
-			//Set Window sizing and format
-			setSize(500, 800);
-			GridLayout layout = new GridLayout(7,1);
-			layout.setVgap(10);
-			setLayout(layout);
-			//clear existing window
-			remove(welcomeWindow);
-			if(nameWindow != null){remove(nameWindow);}
-			if(incomeWindow != null){remove(incomeWindow);}
-			if(billsWindow != null){remove(billsWindow);}
-			//Create new panels
-			nameWindow = new ProfileName(profile);
-			incomeWindow = new IncomePanel(profile);
-			billsWindow = new BillsPanel(profile);
-			
-			/**
-			profileWelcomeWindow();
-			spendingWindow();
-			paymentsWidnow();
-			groceryWindow();
-			wishlistWindow();
-
-			add(incomeWindow);
-			add(spendingWindow);
-			add(billsWindow);
-			add(paymentsWindow);
-			add(groceryWindow);
-			add(wishlistWindow);
-			**/
-			add(nameWindow);
-			add(incomeWindow);
-			add(billsWindow);
-			repaint();
-			setVisible(true);
+			profileViewWindow(profileToLoad);
 		}
 	}
 	

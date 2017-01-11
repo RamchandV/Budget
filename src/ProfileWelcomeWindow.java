@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class ProfileWelcomeWindow extends JFrame {
@@ -8,10 +10,11 @@ public class ProfileWelcomeWindow extends JFrame {
 	private JLabel windowLabel;
 	private JButton continueButton;
 	private JTextField profileName;
-	private File profile; 
+	private ProfileContents profile;
 	
-	public ProfileWelcomeWindow(File profile) {
-		windowPanel = new JPanel();
+	public ProfileWelcomeWindow(ProfileContents profile) {
+		this.profile = profile;
+		this.windowPanel = new JPanel();
 		setLocationRelativeTo(null);
 		if(profile == null) {
 			setTitle("Create New Profile:");
@@ -20,7 +23,7 @@ public class ProfileWelcomeWindow extends JFrame {
 			add(windowPanel);
 			setVisible(true);
 		} else {
-			String profileName = profile.getName().replaceAll(".profile", "");
+			String profileName = profile.getName();
 			setTitle("Welcome " + profileName);	
 			setSize(350, 200);
 			loadExistingProfile(profileName);
@@ -33,7 +36,7 @@ public class ProfileWelcomeWindow extends JFrame {
 		windowLabel = new JLabel("Welcome to Dodongos' Budget Calculator: Please provide a profile name!");
 		profileName = new JTextField(10);
 		continueButton = new JButton("Continue");
-		continueButton.addActionListener(new loadProfileListener(windowPanel));
+		continueButton.addActionListener(new newProfileListener());
 		windowPanel.add(windowLabel);
 		windowPanel.add(profileName);
 		windowPanel.add(continueButton);
@@ -52,35 +55,26 @@ public class ProfileWelcomeWindow extends JFrame {
 		windowPanel.add(continueButton);
 	}
 	
-	private class loadProfileListener implements ActionListener {
-		private JPanel panel;
-		public loadProfileListener(JPanel panelIn) {
-			panel = panelIn;
-		}
+	private class newProfileListener implements ActionListener {
 		public void actionPerformed(ActionEvent e)
 	    {
-	    	profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileName.getText() + ".profile"); 
 	    	if(profileName.getText().equals("")) {
 	    		JLabel error = new JLabel("Please enter a profile name:");
-	    		panel.add(error);
+	    		windowPanel.add(error);
 	    		repaint();
 				setVisible(true);
-	    	} else if(profile.exists()) {
+	    	} else if(new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileName.getText() + ".profile").exists()) {
 	    		JLabel error = new JLabel("This Profile Already Exists, please try again:");
-	    		panel.add(error);
+	    		windowPanel.add(error);
 	    		repaint();
 	    		setVisible(true);
 	    	} else {
-	    		PrintWriter newProfileName;
-				try {
-					newProfileName = new PrintWriter("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileName.getText() + ".profile");
-					newProfileName.close();
-					dispose();
-					NewProfileWindow newProfile = new NewProfileWindow(profile);
-				} catch (FileNotFoundException e1) {
-					System.out.println(e1);
-				}
-	    	}
+	    		profile = new ProfileContents(new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileName.getText() + ".profile"));
+	    		profile.put("name:", new ArrayList<String>());
+	    		profile.get("name:").add(profileName.getText());
+				dispose();
+				NewProfileWindow newProfile = new NewProfileWindow(profile);
+		  	}
 	    }
 	}
 }

@@ -4,15 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 public class BillsEditWindow extends JFrame {
-	private JPanel donePanel, caller;
+	private JPanel donePanel;
 	private JButton doneButton;
-	private HashMap<String, String> billsMap, finishedMap;
-	private File profile;
+	private HashMap<String,String> billsMap, finishedMap;
+	private ProfileContents profile;
 	private OutgoingList billsListPanel;
+	private BillsPanel caller;
 	
-	public BillsEditWindow(File profile, JPanel caller) {
+	public BillsEditWindow(ProfileContents profile, BillsPanel caller) {
 		this.profile = profile;
 		this.caller = caller;
 		setTitle("Bills details:");
@@ -38,35 +40,17 @@ public class BillsEditWindow extends JFrame {
 		donePanel.add(doneButton);
 	}
 	
-	private class doneListener implements ActionListener {
+	private class doneListener implements ActionListener {		
 		public void actionPerformed(ActionEvent e) {
-			String profilePath = profile.getAbsolutePath();
-			File tempProfile = new File(profilePath + ".tmp");
-			finishedMap = billsListPanel.getAllElements();			
-			BufferedReader reader;
-			BufferedWriter writer;
-			try {
-				reader = new BufferedReader(new FileReader(profile));
-				writer = new BufferedWriter(new FileWriter(tempProfile));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					if(line.startsWith("monthlyBill:")){
-						continue;
-					} else {
-						writer.write(line + "\n");
-					}
-				}
-				for(Map.Entry<String, String> entry : finishedMap.entrySet()) {
-					writer.write("monthlyBill:" + entry.getKey() + ":" + entry.getValue() + "\n");
-				}
-				reader.close();
-				writer.flush();
-				writer.close();
-			} catch (IOException ex) {
-				System.out.println(ex);
+			finishedMap = billsListPanel.getAllElements();
+			profile.remove("monthlyBill:");
+			profile.put("monthlyBill:", new ArrayList<String>());
+			for(Map.Entry<String, String> entry : finishedMap.entrySet()) {
+				profile.get("monthlyBill:").add(entry.getKey() + ":" + entry.getValue());
 			}
+			
 			if(caller != null){
-				caller.reloadFile(profile);
+				caller.refreshBills();
 				dispose();
 			}
 		}

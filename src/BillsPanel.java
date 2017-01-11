@@ -8,35 +8,36 @@ public class BillsPanel extends JPanel {
 	private JLabel totalLabel = new JLabel("Bills Total: ");
 	private JTextField totalBox;
 	private JButton viewButton;
-	private JPanel billsPanel;
-	private File profile;
-	public BillsPanel(File profile) {
-		billsPanel = this;
+	private ProfileContents profile;
+	private BillsPanel panel;
+	
+	public BillsPanel(ProfileContents profile) {
+		this.panel = this;
+		this.profile = profile;
 		totalBox = new JTextField(BillsFunctions.totalBills(profile));
 		totalBox.setEditable(false);
 		viewButton = new JButton("View");
-		viewButton.addActionListener(new viewButtonListener(profile));
+		viewButton.addActionListener(new viewButtonListener());
 		setLayout(new GridLayout(2,2));
 		add(totalLabel);
 		add(totalBox);
 		add(viewButton);
 	}
 	
-	public void reloadFile(File profile) {
-		String profilePath = profile.getAbsolutePath();
-		this.profile = null;
-		revalidate();
-		repaint();
+	private class viewButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			BillsEditWindow viewWindow = new BillsEditWindow(profile, panel);
+		}
 	}
 	
-	private class viewButtonListener implements ActionListener {
-		private File profile;
-		
-		public viewButtonListener(File profileIn) {
-			profile = profileIn;
-		}
-		public void actionPerformed(ActionEvent e) {
-			BillsEditWindow viewWindow = new BillsEditWindow(profile, billsPanel);
-		}
+	public void refreshBills() {
+		remove(totalBox);
+		remove(viewButton);
+		totalBox = new JTextField(BillsFunctions.totalBills(profile));
+		totalBox.setEditable(false);
+		add(totalBox);
+		add(viewButton);
+		revalidate();
+		repaint();
 	}
 }
