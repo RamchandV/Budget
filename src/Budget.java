@@ -168,10 +168,7 @@ public class Budget extends JFrame {
 			//clear text box
 			profileSelect.setText("");
 			/**
-			profileWelcomeWindow();
 			spendingWindow();
-			paymentsWidnow();
-			groceryWindow();
 			wishlistWindow();
 			**/
 			setLayout(new BorderLayout());
