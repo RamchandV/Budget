@@ -21,14 +21,20 @@ public class NewProfileWindow extends JFrame {
 		windowPanel = new JPanel();
 		ProfileNameWindow name = new ProfileNameWindow(profile);
 		IncomePanel income = new IncomePanel(profile);
-		BillsPanel bills = new BillsPanel(profile);
+		ItemPanel billsWindow = new ItemPanel(profile, "Bills", "monthlyBill:");
+		ItemPanel paymentsPanel = new ItemPanel(profile, "Payments", "requiredPayment:");
+		ItemPanel groceryPanel = new ItemPanel(profile, "Grocery", "groceryPurchase:");
+		ItemPanel wishlistPanel = new ItemPanel(profile, "Wishlist", "wishlistItem:");
 		SaveProfile savePanel = new SaveProfile(profile, windowPanel);
 		GridLayout layout = new GridLayout(6,1);
 		layout.setVgap(10);
 		windowPanel.setLayout(layout);
 		windowPanel.add(name);
 		windowPanel.add(income);
-		windowPanel.add(bills);
+		windowPanel.add(billsWindow);
+		windowPanel.add(paymentsPanel);
+		windowPanel.add(groceryPanel);
+		windowPanel.add(wishlistPanel);
 		windowPanel.add(savePanel, BorderLayout.SOUTH);
 	}
 }

@@ -4,32 +4,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-@SuppressWarnings("serial")
-public class BillsEditWindow extends JFrame {
+public class ItemEditFrame extends JFrame {
 	private JPanel donePanel;
 	private JButton doneButton;
-	private HashMap<String,String> billsMap, finishedMap;
+	private HashMap<String,String> itemMap, finishedMap;
 	private ProfileContents profile;
-	private OutgoingList billsListPanel;
-	private BillsPanel caller;
+	private OutgoingList itemListPanel;
+	private ItemPanel caller;
+	private String frameTitle, searchString;
 	
-	public BillsEditWindow(ProfileContents profile, BillsPanel caller) {
+	public ItemEditFrame(ProfileContents profile, ItemPanel caller) {
 		this.profile = profile;
 		this.caller = caller;
-		setTitle("Bills details:");
+		this.frameTitle = caller.getTitle();
+		this.searchString = caller.getSearchString();
 		setSize(350, 350);
 		setLayout(new BorderLayout());
+		setTitle(frameTitle);
 		setLocationRelativeTo(null);
-		billsList();
+		itemList();
 		donePanel();
-		add(billsListPanel);
+		add(itemListPanel);
 		add(donePanel, BorderLayout.SOUTH);
 		setVisible(true);
 	}
 	
-	public void billsList() {
-		billsMap = Functions.getCurrentItems(profile, "monthlyBill:");
-		billsListPanel = new OutgoingList(billsMap);
+	public void itemList() {
+		itemMap = Functions.getCurrentItems(profile, searchString);
+		itemListPanel = new OutgoingList(itemMap);
 	}
 	
 	public void donePanel() {
@@ -41,15 +43,15 @@ public class BillsEditWindow extends JFrame {
 	
 	private class doneListener implements ActionListener {		
 		public void actionPerformed(ActionEvent e) {
-			finishedMap = billsListPanel.getAllElements();
-			profile.remove("monthlyBill:");
-			profile.put("monthlyBill:", new ArrayList<String>());
+			finishedMap = itemListPanel.getAllElements();
+			profile.remove(searchString);
+			profile.put(searchString, new ArrayList<String>());
 			for(Map.Entry<String, String> entry : finishedMap.entrySet()) {
-				profile.get("monthlyBill:").add(entry.getKey() + ":" + entry.getValue());
+				profile.get(searchString).add(entry.getKey() + ":" + entry.getValue());
 			}
 			
 			if(caller != null){
-				caller.refreshBills();
+				caller.refreshlist();
 				dispose();
 			}
 		}

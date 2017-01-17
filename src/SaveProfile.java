@@ -6,13 +6,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.util.*;
+import javax.swing.*;
 
 public class SaveProfile extends JPanel {
 	private JButton saveButton = new JButton("Save");
