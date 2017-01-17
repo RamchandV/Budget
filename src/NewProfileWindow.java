@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 public class NewProfileWindow extends JFrame {
-	private JPanel windowPanel, savePanel;
+	private JPanel windowPanel;
 	private ProfileContents profile; 
 	
 	public NewProfileWindow(ProfileContents profile) {
@@ -13,22 +13,23 @@ public class NewProfileWindow extends JFrame {
 		setSize(400, 400);
 		setLocationRelativeTo(null);
 		newProfileWindow();
-		//add(windowPanel);
+		add(windowPanel);
 		setVisible(true);
 	}
 	
 	public void newProfileWindow() {
-		ProfileName name = new ProfileName(profile);
+		windowPanel = new JPanel();
+		ProfileNameWindow name = new ProfileNameWindow(profile);
 		IncomePanel income = new IncomePanel(profile);
 		BillsPanel bills = new BillsPanel(profile);
-		savePanel = new SaveProfile(profile, this);
+		SaveProfile savePanel = new SaveProfile(profile, windowPanel);
 		GridLayout layout = new GridLayout(6,1);
 		layout.setVgap(10);
-		setLayout(layout);
-		add(name);
-		add(income);
-		add(bills);
-		add(savePanel, BorderLayout.SOUTH);
+		windowPanel.setLayout(layout);
+		windowPanel.add(name);
+		windowPanel.add(income);
+		windowPanel.add(bills);
+		windowPanel.add(savePanel, BorderLayout.SOUTH);
 	}
 }
 

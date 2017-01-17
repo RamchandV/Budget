@@ -2,10 +2,10 @@ import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 
-public class ProfileName extends JPanel {
+public class ProfileNameWindow extends JPanel {
 	private String name;
 	private JLabel profileLabel = new JLabel("Your Profile Name: ");
-	public ProfileName(ProfileContents profile) {
+	public ProfileNameWindow(ProfileContents profile) {
 		name = profile.getName();
 		setLayout(new GridLayout(1,2));
 		add(profileLabel);

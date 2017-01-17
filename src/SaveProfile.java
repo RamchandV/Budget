@@ -18,9 +18,9 @@ public class SaveProfile extends JPanel {
 	private JButton saveButton = new JButton("Save");
 	private File toWrite;
 	private ProfileContents profile;
-	private JFrame container;
+	private JPanel container;
 	
-	public SaveProfile(ProfileContents profile, JFrame container) {
+	public SaveProfile(ProfileContents profile, JPanel container) {
 		this.profile = profile;
 		this.container = container;
 		saveButton.addActionListener(new saveListener());

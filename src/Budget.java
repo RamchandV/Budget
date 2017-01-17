@@ -9,9 +9,9 @@ public class Budget extends JFrame {
 	//public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu profileMenu, loadProfileMenu, editMenu;
-	private JPanel welcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow, nameWindow, savePanel; 
+	private JPanel welcomeWindow, viewPanel; 
 	private JLabel welcomeLabel;
-	private JButton newProfileButton, selectProfileButton, loadProfileButton, saveButton;
+	private JButton newProfileButton, selectProfileButton, loadProfileButton;
 	private JTextField profileSelect = new JTextField(27);
 	private ProfileContents profile;
 	
@@ -114,44 +114,16 @@ public class Budget extends JFrame {
 		profile = new ProfileContents(toLoad);
 		setProfile(profile);
 		toLoad = null;
+		//Recreate profile view after load	
+		if(welcomeWindow != null){ remove(welcomeWindow); }
+		if(viewPanel != null){ remove(viewPanel); }
+		setSize(500, 800);
+		viewPanel = new ProfileView(profile);
+		add(viewPanel);
+		revalidate();
+		repaint();
 		//Display Welcome Window
 		profileWelcomeWindow();
-		//Set Window sizing and format
-		setSize(500, 800);
-		GridLayout layout = new GridLayout(7,1);
-		layout.setVgap(10);
-		setLayout(layout);
-		//clear existing window
-		remove(welcomeWindow);
-		if(nameWindow != null){remove(nameWindow);}
-		if(incomeWindow != null){remove(incomeWindow);}
-		if(billsWindow != null){remove(billsWindow);}
-		//Create new panels
-		nameWindow = new ProfileName(profile);
-		incomeWindow = new IncomePanel(profile);
-		billsWindow = new BillsPanel(profile);
-		savePanel = new SaveProfile(profile, this);
-		
-		/**
-		profileWelcomeWindow();
-		spendingWindow();
-		paymentsWidnow();
-		groceryWindow();
-		wishlistWindow();
-
-		add(incomeWindow);
-		add(spendingWindow);
-		add(billsWindow);
-		add(paymentsWindow);
-		add(groceryWindow);
-		add(wishlistWindow);
-		**/
-		add(nameWindow);
-		add(incomeWindow);
-		add(billsWindow);
-		add(savePanel, BorderLayout.SOUTH);
-		repaint();
-		setVisible(true);
 	}
 	
 	public void profileWelcomeWindow() {
@@ -192,9 +164,7 @@ public class Budget extends JFrame {
 	private class clearActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			//clear old profile
-			remove(nameWindow);
-			remove(incomeWindow);
-			remove(billsWindow);
+			if(viewPanel != null){ remove(viewPanel); }
 			//clear text box
 			profileSelect.setText("");
 			/**

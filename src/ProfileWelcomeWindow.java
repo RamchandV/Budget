@@ -18,7 +18,7 @@ public class ProfileWelcomeWindow extends JFrame {
 		setLocationRelativeTo(null);
 		if(profile == null) {
 			setTitle("Create New Profile:");
-			setSize(400, 400);
+			setSize(450, 150);
 			newProfileCreator();
 			add(windowPanel);
 			setVisible(true);
