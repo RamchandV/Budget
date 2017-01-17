@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class ProfileContents extends HashMap<String,List<String>> {	
 	public ProfileContents(File profile) {
 		try {

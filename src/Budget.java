@@ -28,10 +28,6 @@ public class Budget extends JFrame {
 		setVisible(true);
 	}
 	
-	private void setProfile(ProfileContents toSet) {
-		this.profile = toSet;
-	}
-	
 	public void setupMenuBar() {
 		//Initialize Load Profile Options
 		ArrayList<String> profilesArray = new ArrayList<String>();
@@ -112,12 +108,11 @@ public class Budget extends JFrame {
 		//Sets private File var to the selected profile
 		File toLoad = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
 		profile = new ProfileContents(toLoad);
-		setProfile(profile);
 		toLoad = null;
 		//Recreate profile view after load	
 		if(welcomeWindow != null){ remove(welcomeWindow); }
 		if(viewPanel != null){ remove(viewPanel); }
-		setSize(500, 800);
+		setSize(500, 400);
 		viewPanel = new ProfileView(profile);
 		add(viewPanel);
 		revalidate();
@@ -126,6 +121,7 @@ public class Budget extends JFrame {
 		profileWelcomeWindow();
 	}
 	
+	@SuppressWarnings("unused")
 	public void profileWelcomeWindow() {
 		ProfileWelcomeWindow profileWelcome = new ProfileWelcomeWindow(this.profile);
 	}

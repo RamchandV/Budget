@@ -4,32 +4,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-@SuppressWarnings("serial")
-public class WishlistEditWindow extends JFrame {
+public class ItemEditFrame extends JFrame {
 	private JPanel donePanel;
 	private JButton doneButton;
-	private HashMap<String,String> wishlistMap, finishedMap;
+	private HashMap<String,String> itemMap, finishedMap;
 	private ProfileContents profile;
-	private OutgoingList wishlistListPanel;
-	private WishlistPanel caller;
+	private OutgoingList itemListPanel;
+	private ItemPanel caller;
+	private String frameTitle, searchString;
 	
-	public WishlistEditWindow(ProfileContents profile, WishlistPanel caller) {
+	public ItemEditFrame(ProfileContents profile, ItemPanel caller) {
 		this.profile = profile;
 		this.caller = caller;
-		setTitle("Wishlist details:");
+		this.frameTitle = caller.getTitle();
+		this.searchString = caller.getSearchString();
 		setSize(350, 350);
 		setLayout(new BorderLayout());
+		setTitle(frameTitle);
 		setLocationRelativeTo(null);
-		wishlistList();
+		itemList();
 		donePanel();
-		add(wishlistListPanel);
+		add(itemListPanel);
 		add(donePanel, BorderLayout.SOUTH);
 		setVisible(true);
 	}
 	
-	public void wishlistList() {
-		wishlistMap = Functions.getCurrentItems(profile, "wishlistItem:");
-		wishlistListPanel = new OutgoingList(wishlistMap);
+	public void itemList() {
+		itemMap = Functions.getCurrentItems(profile, searchString);
+		itemListPanel = new OutgoingList(itemMap);
 	}
 	
 	public void donePanel() {
@@ -41,15 +43,15 @@ public class WishlistEditWindow extends JFrame {
 	
 	private class doneListener implements ActionListener {		
 		public void actionPerformed(ActionEvent e) {
-			finishedMap = wishlistListPanel.getAllElements();
-			profile.remove("wishlistItem:");
-			profile.put("wishlistItem:", new ArrayList<String>());
+			finishedMap = itemListPanel.getAllElements();
+			profile.remove(searchString);
+			profile.put(searchString, new ArrayList<String>());
 			for(Map.Entry<String, String> entry : finishedMap.entrySet()) {
-				profile.get("wishlistItem:").add(entry.getKey() + ":" + entry.getValue());
+				profile.get(searchString).add(entry.getKey() + ":" + entry.getValue());
 			}
 			
 			if(caller != null){
-				caller.refreshWishlist();
+				caller.refreshlist();
 				dispose();
 			}
 		}
