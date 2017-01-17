@@ -13,12 +13,11 @@ public class ProfileView extends JPanel {
 		IncomePanel incomeWindow = new IncomePanel(profile);
 		BillsPanel billsWindow = new BillsPanel(profile);
 		PaymentsPanel paymentsPanel = new PaymentsPanel(profile);
-		SaveProfile savePanel = new SaveProfile(profile, this);
 		GroceryPanel groceryPanel = new GroceryPanel(profile);
 		WishlistPanel wishlistPanel = new WishlistPanel(profile);
+		SaveProfile savePanel = new SaveProfile(profile, this);
 		/**
 		add(spendingWindow);
-		add(paymentsWindow);
 		**/
 		add(nameWindow);
 		add(incomeWindow);

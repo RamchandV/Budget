@@ -167,10 +167,7 @@ public class Budget extends JFrame {
 			if(viewPanel != null){ remove(viewPanel); }
 			//clear text box
 			profileSelect.setText("");
-			/**
-			spendingWindow();
-			wishlistWindow();
-			**/
+			//Reset welcome window
 			setLayout(new BorderLayout());
 			setSize(500, 300);
 			welcomeWindow();
