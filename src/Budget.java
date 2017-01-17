@@ -6,13 +6,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Budget extends JFrame {
-	public File profile; 
+	//public File profile; 
 	private JMenuBar menuBar = new JMenuBar();
-	private JPanel welcomeWindow, profileWelcomeWindow, incomeWindow, spendingWindow, billsWindow, paymentsWindow, groceryWindow, wishlistWindow; 
-	private JLabel welcomeLabel, profileWelcomeLabel, incomeLabel, monthlyIncomeLabel, weeklyIncomeLabel, spendingLabel, billsLabel, paymentsLabel, groceryLabel, wishlistLabel;
-	private JButton newProfileButton, selectProfileButton, loadProfileButton, clearProfileButton, wishListButton, paymentsButton, billsButton;
+	private JMenu profileMenu, loadProfileMenu, editMenu;
+	private JPanel welcomeWindow, viewPanel; 
+	private JLabel welcomeLabel;
+	private JButton newProfileButton, selectProfileButton, loadProfileButton;
 	private JTextField profileSelect = new JTextField(27);
-	private NewWindow newProfile;
+	private ProfileContents profile;
 	
 	public Budget() {
 		setupMenuBar();
@@ -25,6 +26,10 @@ public class Budget extends JFrame {
 		welcomeWindow();
 		add(welcomeWindow, BorderLayout.CENTER);
 		setVisible(true);
+	}
+	
+	private void setProfile(ProfileContents toSet) {
+		this.profile = toSet;
 	}
 	
 	public void setupMenuBar() {
@@ -44,9 +49,9 @@ public class Budget extends JFrame {
 		existingProfiles = profilesArray.toArray(existingProfiles);
 		
 		//Initialize Menu Bar Dropdowns
-		JMenu profileMenu = new JMenu("Profile");
-		JMenu loadProfileMenu = new JMenu("Load");
-		JMenu editMenu = new JMenu("Edit");
+		profileMenu = new JMenu("Profile");
+		loadProfileMenu = new JMenu("Load");
+		editMenu = new JMenu("Edit");
 		
 		//Initialize Buttons for Dropdowns
 		JMenuItem newAction = new JMenuItem("New");
@@ -102,70 +107,43 @@ public class Budget extends JFrame {
 		welcomeWindow.add(profileSelect);
 		welcomeWindow.add(loadProfileButton);
 	}
-		
+	
+	public void profileViewWindow(String profileToLoad) {
+		//Sets private File var to the selected profile
+		File toLoad = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
+		profile = new ProfileContents(toLoad);
+		setProfile(profile);
+		toLoad = null;
+		//Recreate profile view after load	
+		if(welcomeWindow != null){ remove(welcomeWindow); }
+		if(viewPanel != null){ remove(viewPanel); }
+		setSize(500, 800);
+		viewPanel = new ProfileView(profile);
+		add(viewPanel);
+		revalidate();
+		repaint();
+		//Display Welcome Window
+		profileWelcomeWindow();
+	}
+	
 	public void profileWelcomeWindow() {
-		//TODO add middle action and window to welcome a user before displaying information.
-		//Should go load/new -> WELCOME *NAME* (with continue button) -> page display info
-		profileWelcomeLabel = new JLabel("Personal Budget Calculator!");
-		profileWelcomeWindow = new JPanel();
-		profileWelcomeWindow.add(profileWelcomeLabel);
-	}
-	
-	public void incomeWindow() {
-		incomeWindow = new JPanel();
-		incomeWindow.setLayout(new BorderLayout());
-		JPanel values = new IncomePanel(profile);
-		incomeLabel = new JLabel("Your Gross and Taxed Incomes:");
-		incomeWindow.add(incomeLabel, BorderLayout.NORTH);
-		incomeWindow.add(values, BorderLayout.WEST);
-	}
-	
-	public void spendingWindow() {
-		spendingLabel = new JLabel("Personal Budget Calculator!");
-		spendingWindow = new JPanel();
-		spendingWindow.add(spendingLabel);
-	}
-	
-	public void billsWindow() {
-		billsLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		billsWindow = new JPanel();
-		billsWindow.add(billsLabel);
-	}
-	
-	public void paymentsWidnow() {
-		paymentsLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		paymentsWindow = new JPanel();
-		paymentsWindow.add(paymentsLabel);
-	}
-	
-	public void groceryWindow() {
-		groceryLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		groceryWindow = new JPanel();
-		groceryWindow.add(groceryLabel);
-	}
-	
-	public void wishlistWindow() {
-		wishlistLabel = new JLabel("Welcome to Dodongos Personal Budget Calculator!");
-		wishlistWindow = new JPanel();
-		wishlistWindow.add(wishlistLabel);
+		ProfileWelcomeWindow profileWelcome = new ProfileWelcomeWindow(this.profile);
 	}
 		
 	private class newProfileListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			newProfile = new NewWindow("newProfile", profile);
+			profileWelcomeWindow();
 		}
 	}
 	
-	private class selectProfileListener implements ActionListener {		
-		private String profile;
-		
+	private class selectProfileListener implements ActionListener {				
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser chooser = new JFileChooser("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\");
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("Budget Profiles", "profile");
 			chooser.setFileFilter(filter);
 			int status = chooser.showOpenDialog(null);
 			if(status == JFileChooser.APPROVE_OPTION) {
-				profile = chooser.getSelectedFile().getName();
+				String profile = chooser.getSelectedFile().getName();
 				profileSelect.setText(profile.replaceAll(".profile", ""));
 				loadProfileButton.addActionListener(new loadProfileListener(profileSelect.getText()));
 			}
@@ -179,42 +157,19 @@ public class Budget extends JFrame {
 			profileToLoad = profileName;
 		}
 		public void actionPerformed(ActionEvent e) {
-			//Sets private File var to the selected profile
-			profile = new File("C:\\Users\\Dodongos\\git\\Budget\\Profiles\\" + profileToLoad + ".profile");
-			setSize(500, 700);
-			remove(welcomeWindow);
-			setLayout(new GridLayout(6,1));
-			incomeWindow();
-			
-			/**
-			profileWelcomeWindow();
-			spendingWindow();
-			billsWindow();
-			paymentsWidnow();
-			groceryWindow();
-			wishlistWindow();
-
-			add(incomeWindow);
-			add(spendingWindow);
-			add(billsWindow);
-			add(paymentsWindow);
-			add(groceryWindow);
-			add(wishlistWindow);
-			**/
-			
-			add(incomeWindow);
-			repaint();
-			setVisible(true);
+			profileViewWindow(profileToLoad);
 		}
 	}
 	
 	private class clearActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			remove(incomeWindow);
+			//clear old profile
+			if(viewPanel != null){ remove(viewPanel); }
+			//clear text box
+			profileSelect.setText("");
 			/**
 			profileWelcomeWindow();
 			spendingWindow();
-			billsWindow();
 			paymentsWidnow();
 			groceryWindow();
 			wishlistWindow();

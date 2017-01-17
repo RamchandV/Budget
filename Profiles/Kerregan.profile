@@ -4,9 +4,9 @@ monthlyBill:Car Insurance:195
 monthlyBill:Mortgage:1000
 monthlyBill:Gas:30
 monthlyBill:Electric:200
-monthlyBill:WoW:15
+monthlyBill:WoW:500
 yearlyGross:100000
-name:Chilirn
+name:Kerregan
 hourlyGross:34.375
 groceryPurchase:1/3/2017:160
 groceryPurchase:12/17/2016:87.3
