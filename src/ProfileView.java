@@ -12,6 +12,7 @@ public class ProfileView extends JPanel {
 		ProfileNameWindow nameWindow = new ProfileNameWindow(profile);
 		IncomePanel incomeWindow = new IncomePanel(profile);
 		BillsPanel billsWindow = new BillsPanel(profile);
+		PaymentsPanel paymentsPanel = new PaymentsPanel(profile);
 		SaveProfile savePanel = new SaveProfile(profile, this);
 		/**
 		add(spendingWindow);
@@ -22,6 +23,7 @@ public class ProfileView extends JPanel {
 		add(nameWindow);
 		add(incomeWindow);
 		add(billsWindow);
+		add(paymentsPanel);
 		add(savePanel, BorderLayout.SOUTH);
 	}
 }
