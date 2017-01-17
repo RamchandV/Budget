@@ -11,8 +11,9 @@ hourlyGross:34.375
 groceryPurchase:1/3/2017:160
 groceryPurchase:12/17/2016:87.3
 yearlyIncome:66000
-requiredPayment:Brakes:300
 requiredPayment:Oil Change:100
+requiredPayment:Dentist:1100
+requiredPayment:Brakes:340
 wishlistItem:supercharger:2600:www.summitracing.com/parts/wnd-77-174fsb-1/overview/
 weeklyIncome:1375
 hourlyIncome:48.076

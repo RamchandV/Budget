@@ -5,34 +5,34 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class BillsFunctions {
+public class Functions {
 	
-	public static HashMap<String,String> getCurrentBills(ProfileContents profile) {
-		HashMap<String,String> bills = new HashMap<String,String>();
+	public static HashMap<String,String> getCurrentItems(ProfileContents profile, String item) {
+		HashMap<String,String> items = new HashMap<String,String>();
 		if(profile != null) {
 			for(HashMap.Entry<String,List<String>> element : profile.entrySet()) {
-				if(element.getKey().equals("monthlyBill:")){
+				if(element.getKey().equals(item)){
 					for(String entry : element.getValue()){
 						String[] ary = entry.split(":");
-						bills.put(ary[0], ary[1]);
+						items.put(ary[0], ary[1]);
 					}					
 				}
 			}
 		}
-		return bills;
+		return items;
 	}
 	
-	public static String totalBills(ProfileContents profile) {
-		double bills = 0;
+	public static String totalItems(ProfileContents profile, String item) {
+		double itemsTotal = 0;
 		for(HashMap.Entry<String,List<String>> element : profile.entrySet()) {
-			if(element.getKey().equals("monthlyBill:")){
+			if(element.getKey().equals(item)){
 				for(String entry : element.getValue()){
 					String[] ary = entry.split(":");
-					bills += Double.parseDouble(ary[1]);
+					itemsTotal += Double.parseDouble(ary[1]);
 				}					
 
 			}
 		}
-		return Double.toString(bills);
+		return Double.toString(itemsTotal);
 	}
 }
