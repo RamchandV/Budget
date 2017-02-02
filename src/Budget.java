@@ -128,6 +128,7 @@ public class Budget extends JFrame {
 		
 	private class newProfileListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			profile = null;
 			profileWelcomeWindow();
 		}
 	}
